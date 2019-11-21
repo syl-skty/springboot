@@ -5,42 +5,71 @@ import java.util.*;
 /**
  * 表结构模拟
  */
-public  class  TableImitate<K extends Number,E> {
+public  class  TableImitate<K extends Number> {
     private String tableName;//表名
-    private List<E> cloums;//所有列数据
-    private Map<K,E> indexes;//索引数据
+    private DateBaseImitate dataBase;//所属数据库
+    private Map<K,Map<String,Object>> data;//表数据
 
 
-
-    public static <K extends  Number,E> TableImitate<K,E> createTable(String tableName){
-        if(tableName!=null&&tableName!=""){
-            return  new TableImitate<K,E>(tableName);
-        }else{
-            throw new IllegalArgumentException("表名不能为空");
-        }
-    }
 
     /**
      * 创建一个表
      * @param tableName
      */
-    private TableImitate(String tableName) {
+    public TableImitate(DateBaseImitate dataBase,String tableName) {
+        if (dataBase == null) {
+            throw new IllegalArgumentException("数据库不存在");
+        }
+        if(tableName==null||tableName==""){
+            throw  new IllegalArgumentException("表名不合法");
+        }
+        this.dataBase=dataBase;
         this.tableName = tableName;
-        cloums= new ArrayList<E>();
-        indexes=new HashMap<>();
+
     }
 
     /**
-     * 往数据表种插入一条数据
-     * @return true插入成功 false，插入失败
+     * 根据id删除表中的元素
+     * @return
      */
-    public boolean insertDate(K key,E e){
-        if (e == null) {
-            return  false;
+    synchronized
+    public boolean deleteById(Number id){
+        if(id==null){
+            return false;
         }
-        cloums.add(e);
-        indexes.put(key, e);
+        E e = queryById(id);
+        if (e != null) {
+            e=null;
+            indexes.remove(id);
+        }
         return true;
+    }
+
+    /**
+     * 查询所有数据
+     * @return
+     */
+    public List<E> queryAll(){
+        return new ArrayList<E>(indexes.values());
+    }
+
+
+    /**
+     * 根据id查询当前表中的数据
+     * @param id
+     * @return
+     */
+    public E queryById(Number id){
+        return  indexes.get(id);
+    }
+
+    /**
+     * 插入数据到表中,key有就会更新，没有就会插入
+     * @return
+     */
+    synchronized
+    public   boolean insertToTable(Number key,Object data){
+        return indexes.put((K) key,(E) data) != null && cloums.add((E)data);
     }
 
     public String getTableName() {
