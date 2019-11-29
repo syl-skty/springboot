@@ -20,10 +20,12 @@
 
     <dependencies>
 
+        <!--引入web开发相关的依赖，mvc-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
 
         <!--引入thymeleaf-->
         <dependency>
@@ -31,12 +33,17 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!--引入springboot开发工具，使用这个时，会设置自动禁止浏览器缓存，使我们的代码修改后，直接可以刷新到浏览器，并且支持热部署-->
+        <!--使用这个依赖可以默认禁用模板引擎的缓存机制，模板修改后就会立即刷新，适合开发调试。各种资源的HTTP 头部会加上禁用缓存的标识，告诉浏览器不用缓存-->
+        <!--在完全打包部署时，会自动将这个依赖禁用，当使用一般方式启动时，会加载进去-->
+        <!--这边会有热部署支持，工具会监视我们的所有classPath下的文件，修改后将反馈，进行重启（这个重启操作是默认开启的，可以在配置文件中关闭，也可以自己配置排除某些文件在修改后不触发重启，如静态资源）-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope>
+            <scope>runtime</scope><!--这边的范围使用runTime，在运行时加载，最好不要用默认的compile，避免在编码的时候用到里面的内置方法-->
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
@@ -60,6 +67,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludeDevtools>true</excludeDevtools><!--手动配置在打包时，将spring-dev-tools进行去除（为true可以不写，默认会关闭这个，但是有时候在生产环境还要用里面的功能时就必须设置为false），也可以设置为false，因为里面有些工具可以在生产环境中用到，-->
+                </configuration>
             </plugin>
         </plugins>
     </build>
