@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
-            <scope>runtime</scope><!--这边的范围使用runTime，在运行时加载，最好不要用默认的compile，避免在编码的时候用到里面的内置方法-->
+            <scope>compile</scope><!--这边的范围使用runTime，在运行时加载，最好不要用默认的compile，避免在编码的时候用到里面的内置方法-->
             <optional>true</optional>
         </dependency>
 

@@ -15,6 +15,12 @@ public class Person {
     public Person() {
     }
 
+    public Person(Long id, String name, String address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+    }
+
     public Person(Long id, String name, String address, Integer age, Boolean isLogin) {
         this.id = id;
         this.name = name;
