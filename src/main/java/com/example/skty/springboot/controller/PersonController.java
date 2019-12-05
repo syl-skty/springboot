@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/person")
 public class PersonController {
 
-    @Value("${com.skty.test.name}")
+    @Value("${com.skty.name}")
     private String name;
-    @Value("${com.skty.test.name1}")
+
     private String name1;
     /**
      * 通过人员id获取人员数据
@@ -22,6 +22,7 @@ public class PersonController {
      */
     @GetMapping("/get/code/{userCode}")
     public Person queryPerson(@PathVariable Long userCode){
+        System.out.println("测试修改1111");
         return  new Person(1L, name, "地址");
     }
 
