@@ -106,6 +106,22 @@
                     <excludeDevtools>false</excludeDevtools><!--手动配置在打包时，将spring-dev-tools进行去除（为true可以不写，默认会关闭这个，但是有时候在生产环境还要用里面的功能时就必须设置为false），也可以设置为false，因为里面有些工具(远程重启功能)可以在生产环境中用到，-->
                 </configuration>
             </plugin>
+
+
+            <!--配置打包程序时将所有springboot配置文件打包进去,这样会将所有的配置文件放到类路径下-->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                    <useDefaultDelimiters>true</useDefaultDelimiters>
+                    <resources>
+                        <resource>
+                            <directory>src/main/resources/</directory>
+                            <filtering>true</filtering>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
