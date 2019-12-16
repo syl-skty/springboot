@@ -2,14 +2,25 @@ package com.example.skty.springboot.entity;
 
 import org.springframework.context.annotation.Bean;
 
+import javax.persistence.*;
+
 /**
  * 人员实体类
  */
+@Entity
+@Table(name = "person")
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name")
    private String name;
+    @Column(name = "address")
    private String address;
+    @Column(name = "age")
    private Integer age;
+    @Column(name = "is_login")
    private Boolean isLogin;
 
     public Person() {
