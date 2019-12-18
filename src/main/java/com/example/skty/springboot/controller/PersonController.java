@@ -1,15 +1,23 @@
 package com.example.skty.springboot.controller;
 
 import com.example.skty.springboot.entity.Person;
+import com.example.skty.springboot.mesg.ResponseMesg;
+import com.example.skty.springboot.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+
+    @Autowired
+    private PersonService personService;
 
     @Value("${com.skty.name}")
     private String name;
@@ -21,14 +29,14 @@ public class PersonController {
      * @return
      */
     @GetMapping("/get/code/{userCode}")
-    public Person queryPerson(@PathVariable Long userCode){
-        System.out.println("测试修改1111");
-        return  new Person(1L, name, "地址");
+    public ResponseMesg<Person> queryPerson(@PathVariable Long userCode){
+        return new ResponseMesg<>(200, "success", personService.getPersonById(userCode));
     }
 
     @GetMapping("/get/name/{name}")
-    public Person queryPerson(@PathVariable String name){
-        return  new Person(2L, name1, "地址1");
+    public List<Person> queryPerson(@PathVariable String name){
+        return  personService.getPersonByName(name);
     }
+
 
 }

@@ -3,6 +3,8 @@ package com.example.skty.springboot.service;
 
 import com.example.skty.springboot.entity.Person;
 
+import java.util.List;
+
 /**
  * 人员服务类
  */
@@ -20,5 +22,19 @@ public interface PersonService {
      * @param name
      * @return
      */
-    Person getPersonByName(String name);
+    List<Person> getPersonByName(String name);
+
+    /**
+     * 保存人员
+     * @param person
+     * @return
+     */
+    void savePerson(Person person);
+
+    /**
+     * 更新人员信息
+     * @param person
+     * @return
+     */
+    void updatePerson(Person person);
 }

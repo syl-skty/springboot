@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 包装返回给客户端的响应信息类
  */
-public class ResponseMesg implements Serializable {
+public class  ResponseMesg<T> implements Serializable {
     /**
      * 响应码
      */
@@ -17,9 +17,9 @@ public class ResponseMesg implements Serializable {
     /**
      * 响应数据
      */
-    private Object data;
+    private T data;
 
-    public ResponseMesg(Integer code, String msg, Object data) {
+    public ResponseMesg(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
@@ -44,11 +44,11 @@ public class ResponseMesg implements Serializable {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 }
