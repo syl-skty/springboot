@@ -7,6 +7,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 信息转换拦截器，用于将接口返回的数据转换为标准的信息返回体，{@link ResponseMesg },同时将一些错误的异常信息进行封装为消息体对象
+ */
 public class MessageWrapper implements HandlerInterceptor {
 
     /**
@@ -31,7 +34,8 @@ public class MessageWrapper implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        return false;
+        System.out.println("前面");
+        return true;
     }
 
     /**
@@ -57,7 +61,7 @@ public class MessageWrapper implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+        System.out.println("中间");
     }
 
     /**
@@ -84,6 +88,6 @@ public class MessageWrapper implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
+        System.out.println("最后");
     }
 }

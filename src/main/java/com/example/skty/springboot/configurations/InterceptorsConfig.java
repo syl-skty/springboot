@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 
 /**
- * 拦截器配置
+ * 拦截器配置，在这边可以添加拦截器
  */
 @Configuration
 public class InterceptorsConfig implements WebMvcConfigurer {
@@ -28,6 +28,6 @@ public class InterceptorsConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MessageWrapper()).addPathPatterns("");
+        registry.addInterceptor(new MessageWrapper()).addPathPatterns("/interface/data/**");
     }
 }
