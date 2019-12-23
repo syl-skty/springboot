@@ -14,7 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/person")
-public class PersonController {
+public class PersonController extends BaseController {
+
 
     @Autowired
     private PersonService personService;
@@ -28,13 +29,13 @@ public class PersonController {
      * @param userCode 人员id
      * @return
      */
-    @GetMapping("/get/code/{userCode}")
-    public ResponseMesg<Person> queryPerson(@PathVariable Long userCode){
+    @GetMapping("/data")
+    public ResponseMesg<Person> queryPerson(@PathVariable("code") Long userCode) {
         return new ResponseMesg<>(200, "success", personService.getPersonById(userCode));
     }
 
     @GetMapping("/get/name/{name}")
-    public List<Person> queryPerson(@PathVariable String name){
+    public List<Person> queryPersonByName(@PathVariable String name) {
         return  personService.getPersonByName(name);
     }
 

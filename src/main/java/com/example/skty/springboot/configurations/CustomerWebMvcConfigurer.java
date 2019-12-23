@@ -19,7 +19,6 @@ public class CustomerWebMvcConfigurer implements WebMvcConfigurer {
      */
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
-
         //handlers.add(new MessageWrapper(new ArrayList<>()));
     }
 

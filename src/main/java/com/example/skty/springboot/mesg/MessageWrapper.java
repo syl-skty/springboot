@@ -1,6 +1,7 @@
 package com.example.skty.springboot.mesg;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
  */
 
 @RestControllerAdvice("com.example.skty.springboot.controller.data")
-public class MessageWrapper implements ResponseBodyAdvice<ResponseMesg<?>> {
+public class MessageWrapper implements ResponseBodyAdvice<Object> {
 
     Class<Annotation>[] suitableAnnotations = new Class[]{ResponseBody.class, RestController.class};
 
@@ -33,7 +34,9 @@ public class MessageWrapper implements ResponseBodyAdvice<ResponseMesg<?>> {
      */
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
-        return Stream.of(suitableAnnotations).anyMatch(returnType::hasMethodAnnotation);
+        return Stream.of(suitableAnnotations).anyMatch(annotation -> {
+            return returnType.hasMethodAnnotation(annotation) || AnnotatedElementUtils.hasAnnotation(returnType.getContainingClass(), annotation);
+        });
     }
 
 
@@ -50,7 +53,7 @@ public class MessageWrapper implements ResponseBodyAdvice<ResponseMesg<?>> {
      * @return the body that was passed in or a modified (possibly new) instance
      */
     @Override
-    public ResponseMesg<?> beforeBodyWrite(ResponseMesg<?> body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         return null;
     }
 }
