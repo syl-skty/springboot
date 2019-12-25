@@ -1,5 +1,6 @@
 package com.example.skty.springboot.controller;
 
+import com.example.skty.springboot.configurations.value.ControllerUrlMapping;
 import com.example.skty.springboot.entity.Person;
 import com.example.skty.springboot.mesg.ResponseMesg;
 import com.example.skty.springboot.service.PersonService;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/person")
-public class PersonController extends BaseController {
+public class PersonController {
 
 
     @Autowired
@@ -29,14 +30,15 @@ public class PersonController extends BaseController {
      * @param userCode 人员id
      * @return
      */
-    @GetMapping("/data")
+    @GetMapping(ControllerUrlMapping.queryPerson)
     public ResponseMesg<Person> queryPerson(@PathVariable("code") Long userCode) {
         return new ResponseMesg<>(200, "success", personService.getPersonById(userCode));
     }
 
     @GetMapping("/get/name/{name}")
     public List<Person> queryPersonByName(@PathVariable String name) {
-        return  personService.getPersonByName(name);
+        ControllerUrlMapping m = new ControllerUrlMapping();
+        return personService.getPersonByName(ControllerUrlMapping.queryPerson);
     }
 
 

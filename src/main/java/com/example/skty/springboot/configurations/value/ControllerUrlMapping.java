@@ -1,32 +1,19 @@
 package com.example.skty.springboot.configurations.value;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import com.example.skty.springboot.annotation.LoadProperties;
 
 /**
  * 浏览器路由映射配置类
  */
-@Configuration
-@PropertySource("classpath:config-value/application-url-mapping.properties")
-@ConfigurationProperties(prefix = "com.example.skty.springboot.controller.personcontroller.queryperson")
+//@PropertySource("classpath:config-value/application-url-mapping.properties")
+@LoadProperties(path = "classpath:config-value/application-url-mapping.properties", prefix = "com.example.skty.springboot.controller.PersonController")
 public class ControllerUrlMapping {
-    public String queryPerson;
-    public String queryPersonByName;
+    public static final String queryPerson = "";
+    public static final String queryPersonByName = new String("");
 
-    public String getQueryPerson() {
-        return queryPerson;
+    static {
+        System.out.println("===================================我记在了+++++++++++++++++++++++++++++");
+
     }
 
-    public void setQueryPerson(String queryPerson) {
-        this.queryPerson = queryPerson;
-    }
-
-    public String getQueryPersonByName() {
-        return queryPersonByName;
-    }
-
-    public void setQueryPersonByName(String queryPersonByName) {
-        this.queryPersonByName = queryPersonByName;
-    }
 }
