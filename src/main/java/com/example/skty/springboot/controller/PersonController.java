@@ -30,7 +30,7 @@ public class PersonController {
      * @param userCode 人员id
      * @return
      */
-    @GetMapping(ControllerUrlMapping.queryPerson)
+    @GetMapping()
     public ResponseMesg<Person> queryPerson(@PathVariable("code") Long userCode) {
         return new ResponseMesg<>(200, "success", personService.getPersonById(userCode));
     }

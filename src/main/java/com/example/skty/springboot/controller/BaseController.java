@@ -1,14 +1,19 @@
 package com.example.skty.springboot.controller;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Configuration
-@ConfigurationProperties("s")
 public class BaseController {
 
+    @Autowired
+    private BaseController b;
 
-    static {
+    public static void main(String[] args) {
+        BaseController b = new BaseController();
 
+        System.out.println();
+    }
+
+    public static void test() {
+        test();
     }
 }

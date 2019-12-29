@@ -1,5 +1,6 @@
 package com.example.skty.springboot.annotation;
 
+import com.example.skty.springboot.configurations.value.MyRequestMappingHandlerMapping;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -23,6 +24,7 @@ public class LoadPropertyToBeanUtil {
      * @param currentClass 当前要绑定的类对象
      */
     public static void loadProperties(Class<?> currentClass) {
+        MyRequestMappingHandlerMapping r = new MyRequestMappingHandlerMapping();
         LoadProperties loadPropertiesAnnotation = AnnotationUtils.getAnnotation(currentClass, LoadProperties.class);
         if (loadPropertiesAnnotation != null) {
             Properties properties = readPropertiesFile(loadPropertiesAnnotation.path());
