@@ -62,7 +62,8 @@ public class LoadPropertyToBeanUtil {
         Properties properties = null;
         if (StringUtils.hasText(filePath)) {
             try {
-                properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(ResourceUtils.getFile(filePath)));//读取文件
+                //读取文件
+                properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(ResourceUtils.getFile(filePath)));
             } catch (IOException e) {
                 e.printStackTrace();//配置文件读取失败
             }
