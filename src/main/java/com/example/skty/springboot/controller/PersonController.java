@@ -8,13 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+//@RequestMapping("/person")
 public class PersonController {
 
 
@@ -30,12 +29,12 @@ public class PersonController {
      * @param userCode 人员id
      * @return
      */
-    @GetMapping()
+    @GetMapping
     public ResponseMesg<Person> queryPerson(@PathVariable("code") Long userCode) {
         return new ResponseMesg<>(200, "success", personService.getPersonById(userCode));
     }
 
-    @GetMapping("/get/name/{name}")
+    @GetMapping
     public List<Person> queryPersonByName(@PathVariable String name) {
         ControllerUrlMapping m = new ControllerUrlMapping();
         return personService.getPersonByName(ControllerUrlMapping.queryPerson);

@@ -18,13 +18,13 @@ public @interface LoadProperties {
      *
      * @return
      */
-    String path();
+    String path() default "classpath:mapping/mapping-config.properties";
 
     /**
      * 要注入的属性的前缀名
      *
      * @return
      */
-    String prefix() default "";
+    String prefix();
 
 }

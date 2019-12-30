@@ -11,7 +11,7 @@ public class BeanFactory {
 
     @Order(Ordered.HIGHEST_PRECEDENCE + 110)
     @Bean
-    public RequestMappingHandlerMapping RequestMappingHandlerMapping() {
+    public RequestMappingHandlerMapping requestMappingHandlerMapping() {
         return new MyRequestMappingHandlerMapping();
     }
 }

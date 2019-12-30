@@ -7,6 +7,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.util.StringValueResolver;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
@@ -28,7 +29,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
     private boolean useSuffixPatternMatch = true;
     private boolean useRegisteredSuffixPatternMatch = false;
     private boolean useTrailingSlashMatch = true;
-    private String defaultPropertiesPath = "classpath:";
+    private final String defaultPropertiesPath = "classpath:mapping/mapping-config.properties";
     @Nullable
     private StringValueResolver embeddedValueResolver;
 
@@ -146,8 +147,16 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
      * @return
      */
     private String[] getUrlMappingFromProperties(Class<?> element) {
-
-        return null;
+        LoadProperties annotation = AnnotationUtils.getAnnotation(element, LoadProperties.class);
+        String configFilePath = defaultPropertiesPath;
+        String keyPath = null;
+        if (annotation != null) {
+            configFilePath = annotation.path().trim();
+            keyPath = annotation.prefix() == null ? element.getName() : annotation.prefix() + "." + element.getSimpleName();
+        } else {
+            keyPath = element.getName();
+        }
+        return readFromProperties(configFilePath, keyPath);
     }
 
 
@@ -162,13 +171,17 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         Class<?> controllerClass = element.getDeclaringClass();
         //获取当前所在Controller的配置文件注解
         LoadProperties annotation = AnnotationUtils.getAnnotation(controllerClass, LoadProperties.class);
+        String configFilePath = defaultPropertiesPath;
+        String keyPath = null;
+        //手动加了注解，使用注解数据，否则使用默认配置
         if (annotation != null) {
-            String path = annotation.path();
-            //获取在配置文件中的映射,前缀优先使用填写的路径名，否则使用默认的路径名（当前类的全路径）
-            String fullPath = Optional.of(annotation.prefix()).orElse(controllerClass.getName()) + element.getName();
-
+            configFilePath = annotation.path().trim();
+            //获取在配置文件中的映射,前缀优先使用填写的路径名，否则使用默认的路径名（当前类加方法名的全路径）
+            keyPath = Optional.of(annotation.prefix()).orElse(controllerClass.getName()) + "." + element.getName();
+        } else {
+            keyPath = controllerClass.getName() + "." + element.getName();
         }
-        return null;
+        return readFromProperties(configFilePath, keyPath);
     }
 
 
@@ -180,25 +193,48 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
      * @return
      */
     private String[] readFromProperties(String filePath, String keyName) {
+        String[] pathArr = null;
+        //构建匹配字符正则
+        Pattern keyPattern = Pattern.compile("^" + escapeRegexStr(keyName) + "(\\[\\d+])?$", Pattern.CASE_INSENSITIVE);
         try {
-            Properties properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(ResourceUtils.getFile(filePath)));
-            if (properties != null) {
-                List<String> pathArr = new ArrayList();
-                properties.forEach((k, v) -> {
-
-                });
+            //取一次缓存
+            Properties properties = configPropertiesMap.get(filePath);
+            if (properties == null) {
+                properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(ResourceUtils.getFile(filePath)));
+                //放入缓存
+                configPropertiesMap.put(filePath, properties);
             }
+            List<String> pathList = new ArrayList<>();
+                properties.forEach((k, v) -> {
+                    String kStr = StringUtils.trimWhitespace(k.toString());
+                    //匹配上就把它放入到列表中
+                    if (keyPattern.matcher(kStr).matches()) {
+                        pathList.add(v.toString().trim());
+                    }
+                });
+            pathArr = pathList.toArray(new String[pathList.size()]);
         } catch (IOException e) {
             throw new IllegalArgumentException("当前路径映射配置文件不存在,路径名->" + filePath);
         }
-
-        return null;
+        return pathArr;
     }
 
-    private boolean checkPathArrMatch(String path, String beCheck) {
-        Pattern.matches("test(\\[\\d+\\])?", "");
-        return false;
+    /**
+     * 将字符中的所有跟正则相关的字符进行转义
+     *
+     * @param regx
+     * @return
+     */
+    private String escapeRegexStr(String regx) {
+        if (StringUtils.hasText(regx)) {
+            String[] fbsArr = {"\\", "$", "(", ")", "*", "+", ".", "[", "]", "?", "^", "{", "}", "|"};
+            for (String s : fbsArr) {
+                if (regx.contains(s)) {
+                    regx = regx.replace(s, "\\" + s);
+                }
+            }
+        }
+        return regx;
     }
-
 
 }
