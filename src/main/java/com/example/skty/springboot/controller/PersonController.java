@@ -26,12 +26,12 @@ public class PersonController {
     private String name1;
     /**
      * 通过人员id获取人员数据
-     * @param userCode 人员id
+     * @param code 人员id
      * @return
      */
     @GetMapping
-    public ResponseMesg<Person> queryPerson(@PathVariable("code") Long userCode) {
-        return new ResponseMesg<>(200, "success", personService.getPersonById(userCode));
+    public ResponseMesg<Person> queryPerson(@PathVariable Long code) {
+        return new ResponseMesg<>(200, "success", personService.getPersonById(code));
     }
 
     @GetMapping

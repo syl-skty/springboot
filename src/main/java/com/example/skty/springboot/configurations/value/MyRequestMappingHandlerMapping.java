@@ -43,7 +43,6 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
 
     @Override
     protected RequestMappingInfo getMappingForMethod(Method method, Class<?> handlerType) {
-        System.out.println("我的执行" + handlerType.getName());
         RequestMappingInfo info = createRequestMappingInfo(method);
         if (info != null) {
             RequestMappingInfo typeInfo = createRequestMappingInfo(handlerType);
@@ -152,7 +151,8 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         String keyPath = null;
         if (annotation != null) {
             configFilePath = annotation.path().trim();
-            keyPath = annotation.prefix() == null ? element.getName() : annotation.prefix() + "." + element.getSimpleName();
+            annotation.prefix();
+            keyPath = annotation.prefix() + "." + element.getSimpleName();
         } else {
             keyPath = element.getName();
         }
@@ -212,7 +212,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                         pathList.add(v.toString().trim());
                     }
                 });
-            pathArr = pathList.toArray(new String[pathList.size()]);
+            pathArr = pathList.toArray(new String[0]);
         } catch (IOException e) {
             throw new IllegalArgumentException("当前路径映射配置文件不存在,路径名->" + filePath);
         }
