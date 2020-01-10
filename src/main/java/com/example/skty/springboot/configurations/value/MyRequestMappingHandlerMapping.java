@@ -1,6 +1,7 @@
 package com.example.skty.springboot.configurations.value;
 
 import com.example.skty.springboot.annotation.LoadProperties;
+import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.FileSystemResource;
@@ -30,6 +31,8 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
     private boolean useRegisteredSuffixPatternMatch = false;
     private boolean useTrailingSlashMatch = true;
     private final String defaultPropertiesPath = "classpath:mapping/mapping-config.properties";
+    //系统级别的无url映射地址的Contrller
+    private static final Class[] SYS_CONTROLLER_CLASS = {BasicErrorController.class};
     @Nullable
     private StringValueResolver embeddedValueResolver;
 
@@ -72,6 +75,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         return null;
     }
 
+
     /**
      * 构建map对象
      *
@@ -94,23 +98,6 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         }
         return builder.options(this.config).build();
     }
-
-    @Override
-    protected RequestMappingInfo createRequestMappingInfo(RequestMapping requestMapping, RequestCondition<?> customCondition) {
-        RequestMappingInfo.Builder builder = RequestMappingInfo
-                .paths(resolveEmbeddedValuesInPatterns(requestMapping.path()))
-                .methods(requestMapping.method())
-                .params(requestMapping.params())
-                .headers(requestMapping.headers())
-                .consumes(requestMapping.consumes())
-                .produces(requestMapping.produces())
-                .mappingName(requestMapping.name());
-        if (customCondition != null) {
-            builder.customCondition(customCondition);
-        }
-        return builder.options(this.config).build();
-    }
-
 
     @Override
     public void afterPropertiesSet() {
@@ -146,13 +133,20 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
      * @return
      */
     private String[] getUrlMappingFromProperties(Class<?> element) {
+        if (isSystemController(element)) {//判断当前类是否为系统保留的空参类
+            return new String[0];
+        }
         LoadProperties annotation = AnnotationUtils.getAnnotation(element, LoadProperties.class);
         String configFilePath = defaultPropertiesPath;
         String keyPath = null;
         if (annotation != null) {
             configFilePath = annotation.path().trim();
-            annotation.prefix();
-            keyPath = annotation.prefix() + "." + element.getSimpleName();
+            keyPath = Optional.of(annotation.prefix())
+                    .filter(StringUtils::hasText)
+                    .map(pre -> {
+                        return pre + "." + element.getSimpleName();
+                    })
+                    .orElseGet(() -> annotation.prefix() + "." + element.getSimpleName());
         } else {
             keyPath = element.getName();
         }
@@ -169,6 +163,9 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
     private String[] getUrlMappingFromProperties(Method element) {
         //获取当前的的类对象
         Class<?> controllerClass = element.getDeclaringClass();
+        if (isSystemController(controllerClass)) {//判断当前类是否为系统保留的空参类
+            return new String[0];
+        }
         //获取当前所在Controller的配置文件注解
         LoadProperties annotation = AnnotationUtils.getAnnotation(controllerClass, LoadProperties.class);
         String configFilePath = defaultPropertiesPath;
@@ -177,11 +174,22 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         if (annotation != null) {
             configFilePath = annotation.path().trim();
             //获取在配置文件中的映射,前缀优先使用填写的路径名，否则使用默认的路径名（当前类加方法名的全路径）
-            keyPath = Optional.of(annotation.prefix()).orElse(controllerClass.getName()) + "." + element.getName();
+            keyPath = Optional.of(annotation.prefix()).filter(StringUtils::hasText).orElse(controllerClass.getName()) + "." + element.getName();
         } else {
             keyPath = controllerClass.getName() + "." + element.getName();
         }
         return readFromProperties(configFilePath, keyPath);
+    }
+
+
+    /**
+     * 判断当前是否为系统级别的Controller,有些系统级别的Controller也是注解上没有写值得
+     *
+     * @param element
+     * @return
+     */
+    private boolean isSystemController(Class<?> element) {
+        return Arrays.asList(SYS_CONTROLLER_CLASS).contains(element);
     }
 
 

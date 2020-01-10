@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringbootApplication {
 
     public static void main(String[] args) {
-        // LoadPropertyToBeanUtil.loadProperties(ControllerUrlMapping.class);
         SpringApplication.run(SpringbootApplication.class, args);
     }
 

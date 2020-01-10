@@ -25,6 +25,6 @@ public @interface LoadProperties {
      *
      * @return
      */
-    String prefix();
+    String prefix() default "";
 
 }

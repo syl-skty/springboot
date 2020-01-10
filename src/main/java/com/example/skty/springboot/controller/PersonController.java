@@ -1,6 +1,6 @@
 package com.example.skty.springboot.controller;
 
-import com.example.skty.springboot.configurations.value.ControllerUrlMapping;
+import com.example.skty.springboot.annotation.LoadProperties;
 import com.example.skty.springboot.entity.Person;
 import com.example.skty.springboot.mesg.ResponseMesg;
 import com.example.skty.springboot.service.PersonService;
@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@LoadProperties(path = "classpath:mapping/person/person-mapping.properties")
 @RestController
-//@RequestMapping("/person")
 public class PersonController {
-
 
     @Autowired
     private PersonService personService;
@@ -23,7 +22,6 @@ public class PersonController {
     @Value("${com.skty.name}")
     private String name;
 
-    private String name1;
     /**
      * 通过人员id获取人员数据
      * @param code 人员id
@@ -36,8 +34,7 @@ public class PersonController {
 
     @GetMapping
     public List<Person> queryPersonByName(@PathVariable String name) {
-        ControllerUrlMapping m = new ControllerUrlMapping();
-        return personService.getPersonByName(ControllerUrlMapping.queryPerson);
+        return personService.getPersonByName(name);
     }
 
 
