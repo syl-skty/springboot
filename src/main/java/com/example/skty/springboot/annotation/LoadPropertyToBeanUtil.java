@@ -27,7 +27,7 @@ public class LoadPropertyToBeanUtil {
         MyRequestMappingHandlerMapping r = new MyRequestMappingHandlerMapping();
         LoadProperties loadPropertiesAnnotation = AnnotationUtils.getAnnotation(currentClass, LoadProperties.class);
         if (loadPropertiesAnnotation != null) {
-            Properties properties = readPropertiesFile(loadPropertiesAnnotation.path());
+            Properties properties = readPropertiesFile(loadPropertiesAnnotation.mappingFilePath());
             try {
                 obtainBeanFromProperties(properties, currentClass, loadPropertiesAnnotation.prefix());
             } catch (ReflectiveOperationException e) {

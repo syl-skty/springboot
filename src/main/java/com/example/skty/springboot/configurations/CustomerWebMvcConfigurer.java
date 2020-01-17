@@ -2,7 +2,6 @@ package com.example.skty.springboot.configurations;
 
 import com.example.skty.springboot.configurations.value.MyRequestMappingHandlerMapping;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -26,7 +25,6 @@ public class CustomerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegistr
         //handlers.add(new MessageWrapper(new ArrayList<>()));
     }
 
-    @Bean
     @Override
     public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
         return new MyRequestMappingHandlerMapping();

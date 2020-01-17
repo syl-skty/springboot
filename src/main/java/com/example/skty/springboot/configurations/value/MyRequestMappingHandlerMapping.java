@@ -108,7 +108,6 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         this.config.setTrailingSlashMatch(this.useTrailingSlashMatch);
         this.config.setRegisteredSuffixPatternMatch(this.useRegisteredSuffixPatternMatch);
         this.config.setContentNegotiationManager(getContentNegotiationManager());
-
         super.afterPropertiesSet();
     }
 
@@ -140,13 +139,13 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         String configFilePath = defaultPropertiesPath;
         String keyPath = null;
         if (annotation != null) {
-            configFilePath = annotation.path().trim();
+            configFilePath = annotation.mappingFilePath().trim();
             keyPath = Optional.of(annotation.prefix())
                     .filter(StringUtils::hasText)
                     .map(pre -> {
                         return pre + "." + element.getSimpleName();
                     })
-                    .orElseGet(() -> annotation.prefix() + "." + element.getSimpleName());
+                    .orElseGet(() -> element.getName());
         } else {
             keyPath = element.getName();
         }
@@ -172,7 +171,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         String keyPath = null;
         //手动加了注解，使用注解数据，否则使用默认配置
         if (annotation != null) {
-            configFilePath = annotation.path().trim();
+            configFilePath = annotation.mappingFilePath().trim();
             //获取在配置文件中的映射,前缀优先使用填写的路径名，否则使用默认的路径名（当前类加方法名的全路径）
             keyPath = Optional.of(annotation.prefix()).filter(StringUtils::hasText).orElse(controllerClass.getName()) + "." + element.getName();
         } else {

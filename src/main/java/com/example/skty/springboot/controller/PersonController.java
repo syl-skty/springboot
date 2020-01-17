@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@LoadProperties(path = "classpath:mapping/person/person-mapping.properties")
+@LoadProperties("classpath:mapping/person/person-mapping.properties")
 @RestController
 public class PersonController {
 
