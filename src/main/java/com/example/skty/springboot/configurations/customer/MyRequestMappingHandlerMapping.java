@@ -1,4 +1,4 @@
-package com.example.skty.springboot.configurations.value;
+package com.example.skty.springboot.configurations.customer;
 
 import com.example.skty.springboot.annotation.LoadProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
@@ -24,7 +24,10 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /**
- * @author Administrator
+ * 这个自定义配置类的主要功能是:<br/>
+ *继承了RequestMappingHandlerMapping核心类（这个类的主要功能是生成springmvc的路由方法映射表，读取requestMaping注解，生成url和方法对应的映射表）<br/>
+ *重写它主要是为了实现，将@requestMapping注解上的url参数不再写死在代码中，而是直接读取properties文件中的配置。
+ * @author SYL
  */
 public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
     private boolean useSuffixPatternMatch = true;
@@ -145,7 +148,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                     .map(pre -> {
                         return pre + "." + element.getSimpleName();
                     })
-                    .orElseGet(() -> element.getName());
+                    .orElseGet(element::getName);
         } else {
             keyPath = element.getName();
         }

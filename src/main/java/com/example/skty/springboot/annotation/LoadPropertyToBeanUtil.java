@@ -1,6 +1,6 @@
 package com.example.skty.springboot.annotation;
 
-import com.example.skty.springboot.configurations.value.MyRequestMappingHandlerMapping;
+import com.example.skty.springboot.configurations.customer.MyRequestMappingHandlerMapping;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;

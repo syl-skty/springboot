@@ -1,19 +1,18 @@
 package com.example.skty.springboot.configurations;
 
-import com.example.skty.springboot.configurations.value.MyRequestMappingHandlerMapping;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.util.List;
 
 /**
- * springmvc组件配置
+ * springmvc组件配置,
+ * 在这里可以自定义大部分springmvc的组件
+ * @author skty
  */
 @Configuration
-public class CustomerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegistrations {
+public class CustomerWebMvcConfigurer implements WebMvcConfigurer {
 
     /**
      * 添加返回值处理器（用于自定义处理返回值）
@@ -23,10 +22,5 @@ public class CustomerWebMvcConfigurer implements WebMvcConfigurer, WebMvcRegistr
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
         //handlers.add(new MessageWrapper(new ArrayList<>()));
-    }
-
-    @Override
-    public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-        return new MyRequestMappingHandlerMapping();
     }
 }

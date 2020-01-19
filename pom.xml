@@ -57,6 +57,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+
         <!--引入h2内存数据库，这个数据库基于内存，但是我们可以像连接普通数据库一样使用它，但是基于内存，使用数据库之前也要引入一些数据库连接相关的依赖，前面的jpa里面有-->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -108,7 +110,7 @@
             </plugin>
 
 
-            <!--配置打包程序时将所有springboot配置文件打包进去,这样会将所有的配置文件放到类路径下-->
+            <!--配置打包程序时将所有springboot配置文件打包进去,这样会将所有的配置文件放到类路径下,这样就可以在spring配置文件中访问maven中的一些属性了-->
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <configuration>

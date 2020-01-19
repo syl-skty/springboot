@@ -1,8 +1,7 @@
 package com.example.skty.springboot.service.impl;
 
-import com.example.skty.springboot.dao.PersonDao;
 import com.example.skty.springboot.entity.Person;
-import com.example.skty.springboot.repository.UserRepository;
+import com.example.skty.springboot.repository.PersonRepository;
 import com.example.skty.springboot.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +15,7 @@ import java.util.List;
 public class PersonServiceImpl implements PersonService {
 
     @Autowired
-    private PersonDao personDao;
-
-    @Autowired
-    private UserRepository userRepository;
+    private PersonRepository personRepository;
 
     /**
      * 根据人员id查询人员
@@ -30,7 +26,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Person getPersonById(Long id) {
         Assert.notNull(id, "查询人员时，id不能为空");
-        return userRepository.findById(id).orElse(new Person());
+        return personRepository.findById(id).orElse(new Person());
     }
 
     /**
@@ -41,7 +37,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public List<Person> getPersonByName(String name) {
-        return userRepository.getByName(name);
+        return personRepository.getByName(name);
     }
 
     /**
@@ -51,7 +47,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public void savePerson(Person person) {
-         userRepository.save(person);
+        personRepository.save(person);
     }
 
     /**
@@ -61,6 +57,6 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public void updatePerson(Person person) {
-       userRepository.save(person);
+        personRepository.save(person);
     }
 }
