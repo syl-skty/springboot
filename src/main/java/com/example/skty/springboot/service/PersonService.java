@@ -1,7 +1,7 @@
 package com.example.skty.springboot.service;
 
 
-import com.example.skty.springboot.entity.Person;
+import com.example.skty.springboot.entity.db1.Person;
 
 import java.util.List;
 
@@ -33,8 +33,11 @@ public interface PersonService {
 
     /**
      * 更新人员信息
+     *
      * @param person
      * @return
      */
     void updatePerson(Person person);
+
+    List<Person> findAllPerson();
 }

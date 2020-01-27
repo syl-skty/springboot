@@ -1,4 +1,4 @@
-package com.example.skty.springboot.entity;
+package com.example.skty.springboot.entity.db1;
 
 import org.springframework.context.annotation.Bean;
 

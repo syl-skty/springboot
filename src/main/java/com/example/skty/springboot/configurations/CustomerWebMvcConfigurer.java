@@ -2,6 +2,7 @@ package com.example.skty.springboot.configurations;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -22,5 +23,15 @@ public class CustomerWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
         //handlers.add(new MessageWrapper(new ArrayList<>()));
+    }
+
+    /**
+     * 自定义的Controller异常处理
+     *
+     * @param resolvers
+     */
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+        resolvers.size();
     }
 }

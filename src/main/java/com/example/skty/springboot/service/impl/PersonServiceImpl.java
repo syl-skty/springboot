@@ -1,7 +1,7 @@
 package com.example.skty.springboot.service.impl;
 
-import com.example.skty.springboot.entity.Person;
-import com.example.skty.springboot.repository.PersonRepository;
+import com.example.skty.springboot.entity.db1.Person;
+import com.example.skty.springboot.repository.db1.PersonRepository;
 import com.example.skty.springboot.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,5 +58,9 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public void updatePerson(Person person) {
         personRepository.save(person);
+    }
+
+    public List<Person> findAllPerson() {
+        return personRepository.findAll();
     }
 }

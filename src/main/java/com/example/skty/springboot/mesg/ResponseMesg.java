@@ -5,11 +5,11 @@ import java.io.Serializable;
 /**
  * 包装返回给客户端的响应信息类
  */
-public class  ResponseMesg<T> implements Serializable {
+public class ResponseMesg<T> implements Serializable {
     /**
      * 响应码
      */
-    private Integer code;
+    private Integer status;
     /**
      * 响应信息
      */
@@ -20,7 +20,7 @@ public class  ResponseMesg<T> implements Serializable {
     private T data;
 
     public ResponseMesg(Integer code, String msg, T data) {
-        this.code = code;
+        this.status = code;
         this.msg = msg;
         this.data = data;
     }
@@ -28,12 +28,12 @@ public class  ResponseMesg<T> implements Serializable {
     public ResponseMesg() {
     }
 
-    public Integer getCode() {
-        return code;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getMsg() {

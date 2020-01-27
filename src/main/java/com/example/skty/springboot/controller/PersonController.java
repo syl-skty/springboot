@@ -1,7 +1,7 @@
 package com.example.skty.springboot.controller;
 
 import com.example.skty.springboot.annotation.LoadProperties;
-import com.example.skty.springboot.entity.Person;
+import com.example.skty.springboot.entity.db1.Person;
 import com.example.skty.springboot.mesg.ResponseMesg;
 import com.example.skty.springboot.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@LoadProperties("classpath:mapping/person/person-mapping.properties")
+@LoadProperties("classpath:mapping/person-mapping.properties")
 @RestController
 public class PersonController {
 

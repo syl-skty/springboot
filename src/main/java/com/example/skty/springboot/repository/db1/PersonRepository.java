@@ -1,6 +1,6 @@
-package com.example.skty.springboot.repository;
+package com.example.skty.springboot.repository.db1;
 
-import com.example.skty.springboot.entity.Person;
+import com.example.skty.springboot.entity.db1.Person;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

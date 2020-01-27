@@ -1,10 +1,13 @@
 package com.example.skty.springboot.configurations.datasource;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 
 import javax.sql.DataSource;
 
@@ -16,6 +19,22 @@ import javax.sql.DataSource;
 @Configuration
 public class DataSourceConfigurer {
 
+    @Primary
+    @Bean("primaryDataSourceProperties")
+    @ConfigurationProperties(prefix = "spring.datasource.primary")
+    public DataSourceProperties primaryDataSourceProperties(){
+        return new DataSourceProperties();
+    }
+
+    @Bean("secondDataSourceProperties")
+    @ConfigurationProperties(prefix = "spring.datasource.second")
+    public DataSourceProperties secondDataSourceProperties(){
+        return new DataSourceProperties();
+    }
+
+
+
+
     /**
      * 使用@ConfigurationProperties注解，声明前缀，这样就可以在使用的时候获取配置文件中的不同连接信息
      * 该注解不但能使用在类上（将配置文件中的数据绑定到类中的属性上），还能使用在方法上（将配置文件中的数据传递到方法执行中）
@@ -25,14 +44,13 @@ public class DataSourceConfigurer {
 
     @Primary//设置为基础的bean,当有多个数据源bean时，没有指定名称，默认使用这个
     @Bean("primaryDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.primary")
-    public DataSource primaryDataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource primaryDataSource(@Qualifier("primaryDataSourceProperties") DataSourceProperties primaryDataSourceProperties) {
+        return DataSourceInitializer.initializerDataSource(primaryDataSourceProperties);
     }
 
     @Bean("secondDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.second")
-    public DataSource secondDataSource() {
-        return DataSourceBuilder.create().build();
+    public DataSource secondDataSource(@Qualifier("secondDataSourceProperties") DataSourceProperties secondDataSourceProperties) {
+        return DataSourceInitializer.initializerDataSource(secondDataSourceProperties);
     }
+
 }
