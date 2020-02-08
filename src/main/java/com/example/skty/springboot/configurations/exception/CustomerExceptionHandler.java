@@ -1,5 +1,7 @@
-package com.example.skty.springboot.configurations.customer;
+package com.example.skty.springboot.configurations.exception;
 
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver;
 
@@ -13,6 +15,16 @@ public class CustomerExceptionHandler extends AbstractHandlerExceptionResolver {
 
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            if (handlerMethod.hasMethodAnnotation(ResponseBody.class)) {
+
+            }
+            Class<?> beanType = handlerMethod.getBeanType();
+        }
         return null;
     }
+
+
 }

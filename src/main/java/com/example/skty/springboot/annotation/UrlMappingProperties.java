@@ -14,10 +14,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @RequestMapping
-public @interface LoadProperties {
+public @interface UrlMappingProperties {
 
     @AliasFor("mappingFilePath")
     String value() default "classpath:mapping/mapping-config.properties";
+
     /**
      * 要注入到指定的类中的配置文件路径，支持classpath:格式
      *

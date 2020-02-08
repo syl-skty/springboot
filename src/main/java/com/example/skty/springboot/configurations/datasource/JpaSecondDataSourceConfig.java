@@ -50,7 +50,7 @@ public class JpaSecondDataSourceConfig {
 
     @Qualifier("secondTransactionManager")
     @Bean
-    public PlatformTransactionManager secondTransactionManager(EntityManagerFactory entityManagerFactory) {
+    public PlatformTransactionManager secondTransactionManager(@Qualifier("secondEntityManagerFactoryBean") EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory);
         return txManager;

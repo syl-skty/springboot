@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>learn Resources</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="/public/javascript/jquery-3.3.1.js"></script>
+</head>
+<body>
+
+<div style="text-align: center;margin:0 auto;width: 1000px; ">
+    <h1>书籍汇总</h1>
+    <table id="book_table" width="100%" border="1" cellspacing="1" cellpadding="0">
+        <tr>
+            <th>ID</th>
+            <th>书名</th>
+            <th>作者</th>
+            <th>发表日期</th>
+            <th>价格</th>
+            <th>操作</th>
+        </tr>
+        <!--/*@thymesVar id="learnList" type=""*/-->
+        <tr class="book" th:each="book : ${allBook}">
+            <td class="boo_id" th:text="${book.id}"></td>
+            <td class="book_name" th:text="${book.bookName}"></td>
+            <td class="book_authors" th:text="${book.authors}"></td>
+            <td class="publish_date" th:text="${book.publishDate}"></td>
+            <td class="price" th:text="${book.price}"></td>
+            <td class="modify">
+                <div class="modifyOp">
+                    <a href="javascript:void(0);" onclick="modifyBook(this)">修改</a>
+                    <a href="javascript:void(0);" style="color: red">删除</a>
+                </div>
+                <div class="saveOp" style="display: none">
+                    <a href='javascript:void(0);' onclick="saveBook(this)">保存</a>
+                    <a href='javascript:void(0);' onclick="resetToText(this,true)">取消</a>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="6">
+                <button style="width: 50%;cursor: pointer" onclick="addBook()">
+                    新增
+                </button>
+            </td>
+        </tr>
+
+    </table>
+</div>
+</body>
+<script type="text/javascript">
+    //修改表单元素，将显示的数据变为可以输入的input
+    function modifyBook(obj) {
+        changeToInput($(obj).closest("tr"));
+    }
+
+    /**
+     * 点击新增，生成新的一行
+     * */
+    function addBook() {
+        var tr = $("#book_table").find(".book").last()
+        var newTr = '<tr class="book">\n' +
+            '            <td class="boo_id"><input value="" old_value=""></td>\n' +
+            '            <td class="book_name"><input value="" old_value=""></td>\n' +
+            '            <td class="book_authors"><input value="" old_value="tom,bob"></td>\n' +
+            '            <td class="publish_date"><input value="" old_value=""></td>\n' +
+            '            <td class="price"><input value="" old_value=""></td>\n' +
+            '            <td class="modify">\n' +
+            '                <div class="modifyOp" style="display: none;">\n' +
+            '                    <a href="javascript:void(0);" onclick="modifyBook(this)">修改</a>\n' +
+            '                    <a href="javascript:void(0);" style="color: red">删除</a>\n' +
+            '                </div>\n' +
+            '                <div class="saveOp" style="">\n' +
+            '                    <a href="javascript:void(0);" onclick="saveBook(this)" >保存</a>\n' +
+            '                    <a href="javascript:void(0);" onclick="deleteRow(this)" >取消</a>\n' +
+            '                </div>\n' +
+            '            </td>\n' +
+            '        </tr>';
+        tr.after(newTr);
+    }
+
+    /**
+     * 删除一行
+     * */
+    function deleteRow(obj) {
+        $(obj).closest("tr").remove();
+    }
+
+    /**
+     * 将一行中所有的显示列替换为输入框
+     * */
+    function changeToInput(trObj) {
+        $(trObj).find("td").each(function () {
+            var item = $(this);
+            if (item.hasClass("modify")) {
+                item.find(".modifyOp").hide();
+                item.find(".saveOp").show();
+            } else {
+                item.html("<input value='" + item.text() + "' old_value='" + item.text() + "'/>");
+            }
+        })
+    }
+
+    /**
+     * 将输入框重置为显示字体
+     * */
+    function resetToText(trObj, toOld) {
+        $(trObj).find("td").each(function () {
+            var item = $(this);
+            if (item.hasClass("modify")) {
+                item.find(".modifyOp").show();
+                item.find(".saveOp").hide();
+            } else {
+                var value = toOld ? item.find("input").attr("old_value") : item.find("input").val();
+                item.html("<td>" + value + "</td>");
+            }
+        });
+    }
+
+    /**
+     * 获取书籍的json数据
+     * */
+    function getJsonData(trObj) {
+        var jsonObj = {};
+        trObj.find("td").each(function () {
+            var td = $(this);
+            if (!td.hasClass("modify")) {
+                var attrName = td.attr("class");
+                var value = td.find("input").val();
+                jsonObj[attrName] = value;
+            }
+        });
+        return JSON.stringify(jsonObj);
+    }
+
+    /**
+     * 保存
+     * @param obj
+     */
+    function updateBook(obj) {
+        var trObj = $(obj).closest("tr");
+        var jsonData = getJsonData(trObj);
+        $.ajax({
+            url: "",
+            type: "post",
+            data: jsonData,
+            dataType: jsonData,
+            success: function (data) {
+
+            }
+        });
+    }
+
+    /**
+     * 保存
+     * @param obj
+     */
+    function saveBook(obj) {
+        var trObj = $(obj).closest("tr");
+        var jsonData = getJsonData(trObj);
+        $.ajax({
+            url: "",
+            type: "post",
+            data: jsonData,
+            dataType: jsonData,
+            success: function (data) {
+                if (data.status === 'success') {
+
+                }
+            }
+        });
+    }
+
+</script>
+</html>

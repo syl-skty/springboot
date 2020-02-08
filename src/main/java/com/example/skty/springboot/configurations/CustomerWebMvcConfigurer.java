@@ -1,8 +1,10 @@
 package com.example.skty.springboot.configurations;
 
+import com.example.skty.springboot.configurations.exception.CustomerExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 /**
  * springmvc组件配置,
  * 在这里可以自定义大部分springmvc的组件
+ *
  * @author skty
  */
 @Configuration
@@ -32,6 +35,16 @@ public class CustomerWebMvcConfigurer implements WebMvcConfigurer {
      */
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.size();
+        resolvers.add(new CustomerExceptionHandler());
+    }
+
+    /**
+     * 配置静态资源取消拦截
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("static/public/**");
     }
 }

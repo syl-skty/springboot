@@ -1,0 +1,30 @@
+<!--错误页面提示,默认优先使用模板引擎静态资源下面的错误页面映射，
+可查看BasicErrorController中，出现异常将自动请求/error对应的接口，也就是上面的Controller，
+在这里面进行错误页面的选择
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>learn Resources</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+
+<div style="text-align: center;margin:0 auto;width: 1000px; ">
+    <h1>500异常页面</h1>
+    <table width="100%" border="1" cellspacing="1" cellpadding="0">
+        <tr>
+            <td>作者</td>
+            <td>教程名称</td>
+            <td>地址</td>
+        </tr>
+        <!--/*@thymesVar id="learnList" type=""*/-->
+        <tr th:each="learn : ${learnList}">
+            <td th:text="${learn.author}">嘟嘟MD</td>
+            <td th:text="${learn.title}">SPringBoot干货系列</td>
+            <td><a th:href="${learn.url}" target="_blank">点我</a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

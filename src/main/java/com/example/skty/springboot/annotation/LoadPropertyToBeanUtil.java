@@ -25,11 +25,11 @@ public class LoadPropertyToBeanUtil {
      */
     public static void loadProperties(Class<?> currentClass) {
         MyRequestMappingHandlerMapping r = new MyRequestMappingHandlerMapping();
-        LoadProperties loadPropertiesAnnotation = AnnotationUtils.getAnnotation(currentClass, LoadProperties.class);
-        if (loadPropertiesAnnotation != null) {
-            Properties properties = readPropertiesFile(loadPropertiesAnnotation.mappingFilePath());
+        UrlMappingProperties urlMappingPropertiesAnnotation = AnnotationUtils.getAnnotation(currentClass, UrlMappingProperties.class);
+        if (urlMappingPropertiesAnnotation != null) {
+            Properties properties = readPropertiesFile(urlMappingPropertiesAnnotation.mappingFilePath());
             try {
-                obtainBeanFromProperties(properties, currentClass, loadPropertiesAnnotation.prefix());
+                obtainBeanFromProperties(properties, currentClass, urlMappingPropertiesAnnotation.prefix());
             } catch (ReflectiveOperationException e) {
                 e.printStackTrace();
             }

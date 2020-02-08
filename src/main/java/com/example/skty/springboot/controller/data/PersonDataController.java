@@ -1,6 +1,6 @@
 package com.example.skty.springboot.controller.data;
 
-import com.example.skty.springboot.annotation.LoadProperties;
+import com.example.skty.springboot.annotation.UrlMappingProperties;
 import com.example.skty.springboot.entity.db1.Person;
 import com.example.skty.springboot.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@LoadProperties("classpath:mapping/person-mapping.properties")
+@UrlMappingProperties("classpath:mapping/person-mapping.properties")
 public class PersonDataController {
 
     @Autowired

@@ -1,18 +1,18 @@
 package com.example.skty.springboot.controller;
 
-import com.example.skty.springboot.annotation.LoadProperties;
+import com.example.skty.springboot.annotation.UrlMappingProperties;
 import com.example.skty.springboot.entity.db1.Person;
-import com.example.skty.springboot.mesg.ResponseMesg;
 import com.example.skty.springboot.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@LoadProperties("classpath:mapping/person-mapping.properties")
+@UrlMappingProperties("classpath:mapping/person-mapping.properties")
 @RestController
 public class PersonController {
 
@@ -24,12 +24,17 @@ public class PersonController {
 
     /**
      * 通过人员id获取人员数据
+     *
      * @param code 人员id
      * @return
      */
     @GetMapping
-    public ResponseMesg<Person> queryPerson(@PathVariable Long code) {
-        return new ResponseMesg<>(200, "success", personService.getPersonById(code));
+    public ModelAndView queryPerson(@PathVariable Long code) {
+        int i = 1 / 0;
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("personList", personService.getPersonById(code));
+        modelAndView.setViewName("/test");
+        return modelAndView;
     }
 
     @GetMapping

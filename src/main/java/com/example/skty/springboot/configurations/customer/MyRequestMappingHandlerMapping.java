@@ -1,6 +1,6 @@
 package com.example.skty.springboot.configurations.customer;
 
-import com.example.skty.springboot.annotation.LoadProperties;
+import com.example.skty.springboot.annotation.UrlMappingProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -25,8 +25,9 @@ import java.util.regex.Pattern;
 
 /**
  * 这个自定义配置类的主要功能是:<br/>
- *继承了RequestMappingHandlerMapping核心类（这个类的主要功能是生成springmvc的路由方法映射表，读取requestMaping注解，生成url和方法对应的映射表）<br/>
- *重写它主要是为了实现，将@requestMapping注解上的url参数不再写死在代码中，而是直接读取properties文件中的配置。
+ * 继承了RequestMappingHandlerMapping核心类（这个类的主要功能是生成springmvc的路由方法映射表，读取requestMaping注解，生成url和方法对应的映射表）<br/>
+ * 重写它主要是为了实现，将@requestMapping注解上的url参数不再写死在代码中，而是直接读取properties文件中的配置。
+ *
  * @author SYL
  */
 public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
@@ -138,7 +139,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
         if (isSystemController(element)) {//判断当前类是否为系统保留的空参类
             return new String[0];
         }
-        LoadProperties annotation = AnnotationUtils.getAnnotation(element, LoadProperties.class);
+        UrlMappingProperties annotation = AnnotationUtils.getAnnotation(element, UrlMappingProperties.class);
         String configFilePath = defaultPropertiesPath;
         String keyPath = null;
         if (annotation != null) {
@@ -169,7 +170,7 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
             return new String[0];
         }
         //获取当前所在Controller的配置文件注解
-        LoadProperties annotation = AnnotationUtils.getAnnotation(controllerClass, LoadProperties.class);
+        UrlMappingProperties annotation = AnnotationUtils.getAnnotation(controllerClass, UrlMappingProperties.class);
         String configFilePath = defaultPropertiesPath;
         String keyPath = null;
         //手动加了注解，使用注解数据，否则使用默认配置
@@ -215,13 +216,13 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
                 configPropertiesMap.put(filePath, properties);
             }
             List<String> pathList = new ArrayList<>();
-                properties.forEach((k, v) -> {
-                    String kStr = StringUtils.trimWhitespace(k.toString());
-                    //匹配上就把它放入到列表中
-                    if (keyPattern.matcher(kStr).matches()) {
-                        pathList.add(v.toString().trim());
-                    }
-                });
+            properties.forEach((k, v) -> {
+                String kStr = StringUtils.trimWhitespace(k.toString());
+                //匹配上就把它放入到列表中
+                if (keyPattern.matcher(kStr).matches()) {
+                    pathList.add(v.toString().trim());
+                }
+            });
             pathArr = pathList.toArray(new String[0]);
         } catch (IOException e) {
             throw new IllegalArgumentException("当前路径映射配置文件不存在,路径名->" + filePath);

@@ -1,29 +1,28 @@
-package com.example.skty.springboot.controller.data;
+package com.example.skty.springboot.controller;
 
 import com.example.skty.springboot.annotation.UrlMappingProperties;
 import com.example.skty.springboot.entity.db2.Book;
 import com.example.skty.springboot.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
+@Controller
 @UrlMappingProperties("classpath:mapping/book-mapping.properties")
-public class BookDataController {
+public class BookController {
 
     @Autowired
     private BookService bookService;
 
     @GetMapping
-    public List<Book> getAllBook() {
-        return bookService.findAllBook();
+    public ModelAndView showAllBook() {
+        List<Book> allBook = bookService.findAllBook();
+        ModelAndView mv = new ModelAndView("book/allBook");
+        mv.addObject("allBook", allBook);
+        return mv;
     }
 
-    @GetMapping
-    public List<Book> findBookByName(@PathVariable String name) {
-        return bookService.findBooksByName(name);
-    }
 }

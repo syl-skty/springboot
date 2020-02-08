@@ -2,7 +2,6 @@ package com.example.skty.springboot.mesg;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
@@ -16,13 +15,17 @@ import java.lang.annotation.Annotation;
 import java.util.stream.Stream;
 
 /**
- * 信息转换拦截器，用于将接口返回的数据转换为标准的信息返回体，{@link ResponseMesg },同时将一些错误的异常信息进行封装为消息体对象
+ * 信息转换拦截器，用于将接口返回的数据包装为标准的信息返回体，{@link ResponseMessage },同时将一些错误的异常信息进行封装为消息体对象
  */
 
-@RestControllerAdvice("com.example.skty.springboot.controller.data")
+@RestControllerAdvice("com.example.skty.springboot.controller")
 public class MessageWrapper implements ResponseBodyAdvice<Object> {
 
-    Class<Annotation>[] suitableAnnotations = new Class[]{ResponseBody.class, RestController.class};
+    /**
+     * 配置使用当前的返回体转换类的，符合注解
+     * 这边暂时配置为当方法上存在ResponseBody注解和方法上使用了RestController注解时，才使用这个转换类进行转换
+     */
+    private static final Class<Annotation>[] suitableAnnotations = new Class[]{ResponseBody.class, RestController.class};
 
     /**
      * Whether this component supports the given controller method return type
@@ -55,6 +58,6 @@ public class MessageWrapper implements ResponseBodyAdvice<Object> {
      */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        return new ResponseMesg<Object>(HttpStatus.OK.value(), "success", body);
+        return ResponseMessage.successMessage(body);
     }
 }
