@@ -52,7 +52,7 @@
             <optional>true</optional>
         </dependency>
 
-<!--引入数据库相关的依赖，通过引入jpa依赖，可以实现，同时将一些数据库的连接依赖进行引入（如jdbc，事务aop等）-->
+        <!--引入数据库相关的依赖，通过引入jpa依赖，可以实现，同时将一些数据库的连接依赖进行引入（如jdbc，事务aop等）-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -64,6 +64,12 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <!--引入redisx相关的依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
         <!--测试相关的依赖-->
@@ -81,21 +87,19 @@
     </dependencies>
 
 
-
-
-<!--配置远程仓库，配置为阿里的，这样下载会比较快-->
+    <!--配置远程仓库，配置为阿里的，这样下载会比较快-->
     <repositories>
         <repository>
-        <id>maven - ali</id>
-        <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        <releases>
-            <enabled>true</enabled>
-        </releases>
-        <snapshots>
-            <enabled>true</enabled>
-            <updatePolicy>always</updatePolicy>
-            <checksumPolicy>fail</checksumPolicy>
-        </snapshots>
+            <id>maven - ali</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
         </repository>
     </repositories>
 
@@ -105,7 +109,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludeDevtools>false</excludeDevtools><!--手动配置在打包时，将spring-dev-tools进行去除（为true可以不写，默认会关闭这个，但是有时候在生产环境还要用里面的功能时就必须设置为false），也可以设置为false，因为里面有些工具(远程重启功能)可以在生产环境中用到，-->
+                    <excludeDevtools>false
+                    </excludeDevtools><!--手动配置在打包时，将spring-dev-tools进行去除（为true可以不写，默认会关闭这个，但是有时候在生产环境还要用里面的功能时就必须设置为false），也可以设置为false，因为里面有些工具(远程重启功能)可以在生产环境中用到，-->
                 </configuration>
             </plugin>
 

@@ -6,11 +6,15 @@ import java.util.List;
 
 public interface BookService {
 
-    void addBook(Book book);
+    Book addBook(Book book);
 
     List<Book> findBooksByName(String name);
 
     List<Book> findBookByPriceIsGreaterThan(float price);
 
     List<Book> findAllBook();
+
+    Book updateBook(Book book);
+
+    void deleteBook(Long id);
 }

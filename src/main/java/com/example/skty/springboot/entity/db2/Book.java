@@ -1,5 +1,7 @@
 package com.example.skty.springboot.entity.db2;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -21,11 +23,12 @@ public class Book implements Serializable {
     @Column(name = "authors")
     private String authors;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "publish_date")
     private Date publishDate;
 
     @Column(name = "price")
-    private float price;
+    private Float price;
 
     public Long getId() {
         return id;
@@ -59,11 +62,11 @@ public class Book implements Serializable {
         this.publishDate = publishDate;
     }
 
-    public float getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 

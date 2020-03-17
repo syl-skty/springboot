@@ -3,7 +3,7 @@
 <head>
     <title>learn Resources</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="/public/javascript/jquery-3.3.1.js"></script>
+    <script src="/js/jquery-3.3.1.js"></script>
 </head>
 <body>
 
@@ -20,19 +20,19 @@
         </tr>
         <!--/*@thymesVar id="learnList" type=""*/-->
         <tr class="book" th:each="book : ${allBook}">
-            <td class="boo_id" th:text="${book.id}"></td>
-            <td class="book_name" th:text="${book.bookName}"></td>
-            <td class="book_authors" th:text="${book.authors}"></td>
-            <td class="publish_date" th:text="${book.publishDate}"></td>
+            <td class="id" th:text="${book.id}"></td>
+            <td class="bookName" th:text="${book.bookName}"></td>
+            <td class="authors" th:text="${book.authors}"></td>
+            <td class="publishDate" th:text="${book.publishDate}"></td>
             <td class="price" th:text="${book.price}"></td>
             <td class="modify">
                 <div class="modifyOp">
                     <a href="javascript:void(0);" onclick="modifyBook(this)">修改</a>
-                    <a href="javascript:void(0);" style="color: red">删除</a>
+                    <a href="javascript:void(0);" onclick="deleteBook(this)" style="color: red">删除</a>
                 </div>
                 <div class="saveOp" style="display: none">
-                    <a href='javascript:void(0);' onclick="saveBook(this)">保存</a>
-                    <a href='javascript:void(0);' onclick="resetToText(this,true)">取消</a>
+                    <a href='javascript:void(0);' onclick="updateBook(this)">保存</a>
+                    <a href='javascript:void(0);' onclick="cancelModify(this,true)">取消</a>
                 </div>
             </td>
         </tr>
@@ -55,20 +55,44 @@
     }
 
     /**
+     * 删除书本
+     * */
+    function deleteBook(obj) {
+        var id = $(obj).closest("tr").find(".id").text();
+        $.ajax({
+            url: "/book-data/delete/id/" + id,
+            dataType: "json",
+            type: "post",
+            success: function (data) {
+                if (data.status === "success") {
+                    deleteRow(obj);
+                }
+            }
+        });
+    }
+
+    /**
+     * 取消编辑输入框
+     * */
+    function cancelModify(obj) {
+        resetToText($(obj).closest("tr"), true);
+    }
+
+    /**
      * 点击新增，生成新的一行
      * */
     function addBook() {
-        var tr = $("#book_table").find(".book").last()
+        var tr = $("#book_table").find(".book").last();
         var newTr = '<tr class="book">\n' +
-            '            <td class="boo_id"><input value="" old_value=""></td>\n' +
-            '            <td class="book_name"><input value="" old_value=""></td>\n' +
-            '            <td class="book_authors"><input value="" old_value="tom,bob"></td>\n' +
-            '            <td class="publish_date"><input value="" old_value=""></td>\n' +
+            '            <td class="id"></td>\n' +
+            '            <td class="bookName"><input value="" old_value=""></td>\n' +
+            '            <td class="authors"><input value="" old_value="tom,bob"></td>\n' +
+            '            <td class="publishDate"><input type="date" value="" old_value=""></td>\n' +
             '            <td class="price"><input value="" old_value=""></td>\n' +
             '            <td class="modify">\n' +
             '                <div class="modifyOp" style="display: none;">\n' +
             '                    <a href="javascript:void(0);" onclick="modifyBook(this)">修改</a>\n' +
-            '                    <a href="javascript:void(0);" style="color: red">删除</a>\n' +
+            '                    <a href="javascript:void(0);" style="color: red" onclick="deleteBook(this)">删除</a>\n' +
             '                </div>\n' +
             '                <div class="saveOp" style="">\n' +
             '                    <a href="javascript:void(0);" onclick="saveBook(this)" >保存</a>\n' +
@@ -96,7 +120,11 @@
                 item.find(".modifyOp").hide();
                 item.find(".saveOp").show();
             } else {
-                item.html("<input value='" + item.text() + "' old_value='" + item.text() + "'/>");
+                if (item.hasClass("publishDate")) {
+                    item.html("<input type='date' value='" + item.text() + "' old_value='" + item.text() + "'/>");
+                } else if (!item.hasClass("id")) {
+                    item.html("<input value='" + item.text() + "' old_value='" + item.text() + "'/>");
+                }
             }
         })
     }
@@ -104,15 +132,24 @@
     /**
      * 将输入框重置为显示字体
      * */
-    function resetToText(trObj, toOld) {
+    function resetToText(trObj, toOld, newData) {
         $(trObj).find("td").each(function () {
             var item = $(this);
             if (item.hasClass("modify")) {
                 item.find(".modifyOp").show();
                 item.find(".saveOp").hide();
             } else {
-                var value = toOld ? item.find("input").attr("old_value") : item.find("input").val();
-                item.html("<td>" + value + "</td>");
+                if (newData) {
+                    var paramName = item.attr("class");
+                    if (paramName) {
+                        item.html(newData[paramName]);
+                    }
+                } else {
+                    if (!item.hasClass("id")) {
+                        var value = toOld ? item.find("input").attr("old_value") : item.find("input").val();
+                        item.html(value);
+                    }
+                }
             }
         });
     }
@@ -126,27 +163,48 @@
             var td = $(this);
             if (!td.hasClass("modify")) {
                 var attrName = td.attr("class");
-                var value = td.find("input").val();
-                jsonObj[attrName] = value;
+                var value;
+                if (td.hasClass("id")) {
+                    value = td.text();
+                } else if (td.hasClass("publishDate")) {
+                    var date = td.find("input").val();
+                    if (date !== "") {
+                        value = date + " 00:00:00";
+                    }
+                } else {
+                    value = td.find("input").val();
+                }
+                if (value != null && value !== "") {
+                    jsonObj[attrName] = value;
+                }
             }
         });
-        return JSON.stringify(jsonObj);
+        return jsonObj;
     }
 
     /**
-     * 保存
+     * 更新
      * @param obj
      */
     function updateBook(obj) {
         var trObj = $(obj).closest("tr");
         var jsonData = getJsonData(trObj);
+        if (JSON.stringify(jsonData) === "{}") {
+            return;
+        }
         $.ajax({
-            url: "",
+            url: "/book-data/update",
             type: "post",
             data: jsonData,
-            dataType: jsonData,
+            dataType: "json",
             success: function (data) {
-
+                if (data.status === "success") {
+                    if (data.data) {
+                        resetToText(trObj, false, data.data);
+                        return;
+                    }
+                }
+                console.log("更新失败");
             }
         });
     }
@@ -158,17 +216,38 @@
     function saveBook(obj) {
         var trObj = $(obj).closest("tr");
         var jsonData = getJsonData(trObj);
+        if (JSON.stringify(jsonData) === "{}") {
+            return;
+        }
         $.ajax({
-            url: "",
+            url: "/book-data/save",
             type: "post",
             data: jsonData,
-            dataType: jsonData,
+            dataType: "json",
             success: function (data) {
-                if (data.status === 'success') {
-
+                if (data.status === "success") {
+                    if (data.data) {
+                        resetToText(trObj, false, data.data);
+                        return;
+                    }
                 }
+                console.log("新增失败");
             }
         });
+    }
+
+    /**
+     * 加载书本列表
+     */
+    function loadBooks() {
+        $.ajax({
+            url: "",
+            type: "get",
+            dataType: "html",
+            success: function (data) {
+
+            }
+        })
     }
 
 </script>

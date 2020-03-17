@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
- * 这里配置springmvc的核心功能注册组件，可以通过继承并重写spring内部的某些组件，来实现我们自定义的一些功能，之后再将我们的组件在这里注册，以替换原先使用的组件
+ * 这里配置springmvc的核心功能注册组件，可以通过继承并重写springmvc内部的某些组件，来实现我们自定义的一些功能，之后再将我们的组件在这里注册，以替换原先使用的组件
  *
  * @author skty
  */
