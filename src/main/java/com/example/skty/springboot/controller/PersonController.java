@@ -19,7 +19,7 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @Value("${com.skty.name}")
+    @Value("${com.value}")
     private String name;
 
     /**
@@ -30,7 +30,6 @@ public class PersonController {
      */
     @GetMapping
     public ModelAndView queryPerson(@PathVariable Long code) {
-        int i = 1 / 0;
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("personList", personService.getPersonById(code));
         modelAndView.setViewName("/test");

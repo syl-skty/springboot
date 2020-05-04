@@ -4,8 +4,6 @@ import com.example.skty.springboot.annotation.UrlMappingProperties;
 import com.example.skty.springboot.entity.db2.Book;
 import com.example.skty.springboot.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +19,7 @@ public class BookDataController {
     private BookService bookService;
 
     @GetMapping
-    @Cacheable("allBook")
+    // @Cacheable("allBook")
     public List<Book> getAllBook() {
         return bookService.findAllBook();
     }
@@ -42,7 +40,7 @@ public class BookDataController {
         return bookService.addBook(book);
     }
 
-    @CacheEvict()
+    //@CacheEvict()
     @PostMapping
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);

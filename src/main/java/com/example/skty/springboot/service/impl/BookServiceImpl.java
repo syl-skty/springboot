@@ -4,7 +4,6 @@ import com.example.skty.springboot.entity.db2.Book;
 import com.example.skty.springboot.repository.db2.BookRepository;
 import com.example.skty.springboot.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,6 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    @CachePut(cacheNames = "book",)
     @Override
     public Book addBook(Book book) {
         return bookRepository.save(book);
