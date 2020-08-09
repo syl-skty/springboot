@@ -60,16 +60,27 @@
 
 
         <!--引入h2内存数据库，这个数据库基于内存，但是我们可以像连接普通数据库一样使用它，但是基于内存，使用数据库之前也要引入一些数据库连接相关的依赖，前面的jpa里面有-->
+        <!--  <dependency>
+              <groupId>com.h2database</groupId>
+              <artifactId>h2</artifactId>
+              <scope>runtime</scope>
+          </dependency>-->
+
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!--引入redisx相关的依赖-->
+        <!--引入redis相关的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!--引入rabbitMQ相关依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
         <!--测试相关的依赖-->

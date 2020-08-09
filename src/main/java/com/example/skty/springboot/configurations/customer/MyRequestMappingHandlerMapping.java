@@ -4,7 +4,9 @@ import com.example.skty.springboot.annotation.UrlMappingProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
@@ -211,9 +213,14 @@ public class MyRequestMappingHandlerMapping extends RequestMappingHandlerMapping
             //取一次缓存
             Properties properties = configPropertiesMap.get(filePath);
             if (properties == null) {
-                properties = PropertiesLoaderUtils.loadProperties(new FileSystemResource(ResourceUtils.getFile(filePath)));
+                Resource resource = null;
+                if (filePath.startsWith(ResourceUtils.CLASSPATH_URL_PREFIX)) {
+                    resource = new ClassPathResource(filePath.substring(ResourceUtils.CLASSPATH_URL_PREFIX.length()));
+                } else {
+                    resource = new FileSystemResource(ResourceUtils.getFile(filePath));
+                }
                 //放入缓存
-                configPropertiesMap.put(filePath, properties);
+                configPropertiesMap.put(filePath, properties = PropertiesLoaderUtils.loadProperties(resource));
             }
             List<String> pathList = new ArrayList<>();
             properties.forEach((k, v) -> {
